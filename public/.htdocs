@@ -1,0 +1,11 @@
+Options -Indexes
+RewriteEngine On
+
+#Se não for um arquivo real
+RewriteCond %{REQUEST_FILENAME} !-f
+
+#... e não for uma pasta real
+RewriteCond %{REQUEST_FILENAME} !-d
+
+#... redireciona tudo para o index.php
+RewriteRule ^(.*)$ public/$1 [L]
