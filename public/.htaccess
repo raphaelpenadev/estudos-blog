@@ -8,4 +8,4 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
 #... redireciona tudo para o index.php
-RewriteRule ^(.*)$ public/$1 [L]
+RewriteRule ^ index.php [QSA,L]

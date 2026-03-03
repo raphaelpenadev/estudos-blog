@@ -7,8 +7,6 @@ define('BASE_PATH', dirname(__DIR__));
 require_once BASE_PATH . '/config/database.php';
 
 // Carrega os contrutores do sistema
-
-
 require_once BASE_PATH . '/core/Database.php';
 require_once BASE_PATH . '/core/Model.php';
 require_once BASE_PATH . '/core/View.php';
@@ -22,7 +20,6 @@ session_start();
 
 // Cria o roteador com as rotas definidas
 $router = new Router();
-
 require_once BASE_PATH . '/routes/web.php';
 
 
