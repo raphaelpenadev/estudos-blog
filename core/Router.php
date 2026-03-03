@@ -4,7 +4,18 @@ class Router
 {
 
   // Armazena todas as rotas registradas
+  // Cada rota é um array com: method, uri, action
+  // Como fica após o registro
+  // [
+  //  ['method' => 'GET',  'uri' => '/',              'action' => 'Public\HomeController@index'],
+  //  ['method' => 'GET',  'uri' => '/noticia/{slug}','action' => 'Public\HomeController@show'],
+  //  ['method' => 'POST', 'uri' => '/login',         'action' => 'Auth\AuthController@login'],
+  // ]
+
+
   private array $routes = [];
+
+  // Métodos publicos que são chamados no routes/web.php
 
   public function get(string $uri, $action): void
   {
@@ -17,6 +28,10 @@ class Router
     $this->addRoute('POST', $uri, $action);
   }
 
+  // Metodo que adiciona de fato a rota ao array
+  // private: só pode ser chamada pelo proprio router
+  // Metodos get() e post() são só atalhos
+
   private function addRoute(string $method, string $uri, string $action): void
   {
     $this->routes[] = [
@@ -26,10 +41,11 @@ class Router
     ];
   }
 
-  public function dispatch(string $uri): void
+  public function dispatch(): void
   {
 
-    // Pega o caminho da URL sem query strings
+    // $_SERVER['REQUEST_URI'] contém a URI completa, incluindo query string
+
     $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     $requestMethod = $_SERVER['REQUEST_METHOD'];
 
@@ -67,6 +83,7 @@ class Router
   // Instancia o controller e chama o metodo
   private function callAction(string $action, array $params = []): void
   {
+    // explode('@', $action) divide a string pelo @
     [$controllerName, $method] = explode('@', $action);
 
     // Converte namespace em caminho de arquivo
@@ -78,13 +95,17 @@ class Router
 
     require_once $file;
 
+    // Instancia o controller pelo nome da classe (variável como nome de classe)
     $controller = new $controllerName();
 
     if (!method_exists($controller, $method)) {
-      die("Método: {$method} não encontrado em {$controllerName}");
+      die("Método: '{$method}' não encontrado em '{$controllerName}'");
     }
 
-    // Chama o método passando parametros da URL
+
+    // call_user_func_array() chama um método passando um array como argumentos.
+    // É equivalente a: $controller->show('minha-noticia')
+    // Mas de forma dinâmica, sem saber o nome do método em tempo de escrita.
     call_user_func_array([$controller, $method], $params);
   }
 }

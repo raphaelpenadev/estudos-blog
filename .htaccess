@@ -1,0 +1,4 @@
+RewriteEngine On
+
+#... Qualquer acesso na raiz vai para a pasta public
+RewriteRule ^(.*)$ public/$1 [L]

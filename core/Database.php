@@ -12,7 +12,7 @@ class Database
 
     // Cria a conexão caso não exista
     if (self::$instance === null) {
-      $dns = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET;
+      $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET;
 
       try {
         self::$instance = new PDO($dsn, DB_USER, DB_PASS, [
@@ -24,6 +24,7 @@ class Database
           PDO::ATTR_EMULATE_PREPARES => false
         ]);
       } catch (PDOException $e) {
+        //Para produção sempre um erro visual e para analisar (logs)
         die('Erro de conexão: ' . $e->getMessage());
       }
     }

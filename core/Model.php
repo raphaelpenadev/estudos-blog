@@ -37,14 +37,18 @@ abstract class Model
   // Busca por qualquer coluna - flexivel e reutilizavel
   public function findBy(string $column, mixed $value): array | false
   {
-    $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE {$column} = ?");
-    $stmt->execute([$value]);
+    $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE {$column} = :value");
+    $stmt->execute([
+      'value' => $value
+    ]);
     return $stmt->fetch();
   }
 
   public function delete(int $id): bool
   {
-    $stmt = $this->db->prepare("DELETE FROM {$this->table} WHERE id = ?");
-    $stmt->execute([$id]);
+    $stmt = $this->db->prepare("DELETE FROM {$this->table} WHERE id = :id");
+    return $stmt->execute([
+      ':id' => $id
+    ]);
   }
 }
